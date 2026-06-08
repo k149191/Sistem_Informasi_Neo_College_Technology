@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <script src="https://cdn.tailwindcss.com"></script>
     <title>{{ $news->title }}</title>
-    <link rel="icon" type="image/png" href="{{ asset('img/logo_nct.png') }}">
+    <link rel="icon" type="image/png" href="/img/logo_nct.png">
 </head>
 <body class="bg-gray-50">
     <div class="max-w-[90%] mx-auto py-16 sm:py-20 px-4 sm:px-6">

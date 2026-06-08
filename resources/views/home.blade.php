@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Neo College Technology</title>
     <meta name="description" content="Neo College Technology — Membangun masa depan melalui inovasi teknologi dan kolaborasi kreatif untuk generasi digital unggul.">
-    <link rel="icon" type="image/png" href="{{ asset('img/logo_nct.png') }}">
+    <link rel="icon" type="image/png" href="/img/logo_nct.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css"/>
     <style>
