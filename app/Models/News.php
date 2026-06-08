@@ -9,7 +9,6 @@ class News extends Model
 {
     use HasFactory;
 
-    // Menentukan primary key karena bukan 'id'
     protected $primaryKey = 'news_id';
 
     protected $fillable = [

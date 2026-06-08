@@ -19,26 +19,49 @@
 
             <a href="/" class="flex items-center space-x-2 min-w-0">
                 <img src="{{ asset('img/logo_nct.png') }}" class="w-8 h-8 sm:w-10 sm:h-10 flex-shrink-0 object-cover rounded-full">
-                <span class="font-bold text-gray-900 text-xs sm:text-base truncate">Neo College Technology</span>
+                <span class="font-bold text-gray-900 text-xs sm:text-base truncate">
+                    Neo College Technology
+                </span>
             </a>
 
-            <div class="hidden md:flex space-x-6 lg:space-x-8 font-medium text-gray-700">
-                <a href="#tentang" class="hover:text-[#A1D233] transition-colors">Tentang NCT</a>
-                <a href="#berita" class="hover:text-[#A1D233] transition-colors">Berita</a>
-                <a href="#kontak" class="hover:text-[#A1D233] transition-colors">Kontak</a>
+            <div class="hidden md:flex items-center space-x-6 lg:space-x-8">
+                <div class="flex space-x-6 lg:space-x-8 font-medium text-gray-700">
+                    <a href="#tentang" class="hover:text-[#A1D233] transition-colors">Tentang NCT</a>
+                    <a href="#berita" class="hover:text-[#A1D233] transition-colors">Berita</a>
+                    <a href="#kontak" class="hover:text-[#A1D233] transition-colors">Kontak</a>
+                </div>
+
+                <a href="{{ route('login') }}"
+                class="bg-[#A1D233] text-black px-5 py-2 rounded-full font-medium hover:bg-[#8dbb2a] transition">
+                    Login
+                </a>
             </div>
 
             <button id="menu-btn" class="md:hidden text-gray-800 focus:outline-none p-1" aria-label="Toggle menu">
                 <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16m-7 6h7"/>
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+                        d="M4 6h16M4 12h16m-7 6h7"/>
                 </svg>
             </button>
         </div>
 
         <div id="mobile-menu" class="hidden md:hidden bg-white px-4 py-4 space-y-3 shadow-lg border-t border-gray-100">
-            <a href="#tentang" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">Tentang NCT</a>
-            <a href="#berita" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">Berita</a>
-            <a href="#kontak" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">Kontak</a>
+            <a href="#tentang" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">
+                Tentang NCT
+            </a>
+
+            <a href="#berita" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">
+                Berita
+            </a>
+
+            <a href="#kontak" class="block py-2 hover:text-[#A1D233] font-medium transition-colors">
+                Kontak
+            </a>
+
+            <a href="{{ route('login') }}"
+            class="block text-center bg-[#A1D233] text-black py-2 rounded-full font-medium hover:bg-[#8dbb2a] transition">
+                Login
+            </a>
         </div>
     </nav>
 

@@ -9,7 +9,6 @@ use Illuminate\Http\Request;
 class AdminController extends Controller
 {
     public function dashboard() {
-        // Statistik untuk Dashboard
         $stats = [
             'total_users' => User::count(),
             'total_news' => News::count(),

@@ -2,83 +2,112 @@
 @section('title', isset($user) ? 'Edit Pengguna' : 'Tambah Pengguna')
 
 @section('content')
-<div style="--neon:#A1D233;--neon-dim:#8BBF1F;--neon-glow:rgba(161,210,51,0.18);--dark:#0D0F0A;--panel:#141610;--card:#1A1D14;--border:rgba(161,210,51,0.15);--text:#E8F0D0;--muted:#6B7A55;">
+<div class="space-y-6">
 
-    <div class="mb-6">
-        <a href="{{ route('admin.users.index') }}" class="text-sm font-semibold inline-flex items-center gap-1 mb-2" style="color:var(--muted);">
+    <div class="flex items-center gap-2">
+        <a href="{{ route('admin.users.index') }}"
+           class="text-sm font-semibold text-gray-500 hover:text-gray-900 transition">
             ← Kembali
         </a>
-        <h2 class="text-xl font-bold" style="font-family:'Syne',sans-serif;">
-            {{ isset($user) ? 'Edit Pengguna' : 'Tambah Pengguna Baru' }}
-        </h2>
     </div>
 
-    <div class="max-w-xl">
-        <div class="rounded-2xl border p-6" style="background:var(--card); border-color:var(--border);">
-            <form method="POST" action="{{ isset($user) ? route('admin.users.update', $user->user_id) : route('admin.users.store') }}">
-                @csrf
-                @if(isset($user)) @method('PUT') @endif
-
-                <div class="space-y-5">
-                    <!-- Nama -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Nama Lengkap</label>
-                        <input type="text" name="name" value="{{ old('name', $user->name ?? '') }}" required
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text); --tw-ring-color:var(--neon);"
-                               placeholder="Masukkan nama lengkap">
-                        @error('name')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- Email -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Email</label>
-                        <input type="email" name="email" value="{{ old('email', $user->email ?? '') }}" required
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text); --tw-ring-color:var(--neon);"
-                               placeholder="email@example.com">
-                        @error('email')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- Role -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Role</label>
-                        <select name="role" class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                                style="background:var(--panel); border:1px solid var(--border); color:var(--text); --tw-ring-color:var(--neon);">
-                            <option value="admin" {{ (old('role', $user->role ?? '') == 'admin') ? 'selected' : '' }}>Admin</option>
-                            <option value="user" {{ (old('role', $user->role ?? '') == 'user') ? 'selected' : '' }}>User</option>
-                            <option value="dosen" {{ (old('role', $user->role ?? '') == 'dosen') ? 'selected' : '' }}>Dosen</option>
-                        </select>
-                        @error('role')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
-                    </div>
-
-                    <!-- Password -->
-                    <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">
-                            Password {{ isset($user) ? '(kosongkan jika tidak diubah)' : '' }}
-                        </label>
-                        <input type="password" name="password" {{ isset($user) ? '' : 'required' }}
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text); --tw-ring-color:var(--neon);"
-                               placeholder="••••••••">
-                        @error('password')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
-                    </div>
-                </div>
-
-                <div class="flex gap-3 mt-7">
-                    <button type="submit"
-                            class="flex-1 py-3 rounded-xl font-bold text-sm transition hover:opacity-90"
-                            style="background:var(--neon); color:#000;">
-                        {{ isset($user) ? 'Simpan Perubahan' : 'Tambah Pengguna' }}
-                    </button>
-                    <a href="{{ route('admin.users.index') }}"
-                       class="px-5 py-3 rounded-xl font-semibold text-sm transition border"
-                       style="color:var(--muted); border-color:var(--border);">
-                        Batal
-                    </a>
-                </div>
-            </form>
+    <div class="rounded-3xl border bg-white shadow-sm p-5 sm:p-6 lg:p-8"
+         style="border-color:#E5E7EB;">
+        <div class="mb-6">
+            <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-2">Form Pengguna</p>
+            <h2 class="text-2xl font-extrabold text-gray-900">
+                {{ isset($user) ? 'Edit Pengguna' : 'Tambah Pengguna Baru' }}
+            </h2>
+            <p class="text-sm text-gray-500 mt-2">
+                Kelola data pengguna dengan tampilan yang lebih bersih dan ringan.
+            </p>
         </div>
+
+        <form method="POST" action="{{ isset($user) ? route('admin.users.update', $user->user_id) : route('admin.users.store') }}">
+            @csrf
+            @if(isset($user))
+                @method('PUT')
+            @endif
+
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-5">
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">
+                        Nama Lengkap
+                    </label>
+                    <input type="text"
+                           name="name"
+                           value="{{ old('name', $user->name ?? '') }}"
+                           required
+                           class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                           style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
+                           placeholder="Masukkan nama lengkap">
+                    @error('name')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">
+                        Email
+                    </label>
+                    <input type="email"
+                           name="email"
+                           value="{{ old('email', $user->email ?? '') }}"
+                           required
+                           class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                           style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
+                           placeholder="email@example.com">
+                    @error('email')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">
+                        Role
+                    </label>
+                    <select name="role"
+                            required
+                            class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                            style="border-color:#E5E7EB; --tw-ring-color:#A1D233;">
+                        <option value="admin" {{ old('role', $user->role ?? '') == 'admin' ? 'selected' : '' }}>Admin</option>
+                        <option value="dosen" {{ old('role', $user->role ?? '') == 'dosen' ? 'selected' : '' }}>Dosen</option>
+                    </select>
+                    @error('role')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+
+                <div>
+                    <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">
+                        Password {{ isset($user) ? '(kosongkan jika tidak diubah)' : '' }}
+                    </label>
+                    <input type="password"
+                           name="password"
+                           {{ isset($user) ? '' : 'required' }}
+                           class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                           style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
+                           placeholder="••••••••">
+                    @error('password')
+                        <p class="mt-1 text-xs text-red-500">{{ $message }}</p>
+                    @enderror
+                </div>
+            </div>
+
+            <div class="mt-7 flex flex-col sm:flex-row gap-3 sm:justify-end">
+                <a href="{{ route('admin.users.index') }}"
+                   class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-semibold text-sm border bg-white text-gray-700 transition hover:bg-gray-50"
+                   style="border-color:#E5E7EB;">
+                    Batal
+                </a>
+
+                <button type="submit"
+                        class="inline-flex items-center justify-center px-5 py-3 rounded-xl font-bold text-sm transition hover:opacity-90 active:scale-[0.98]"
+                        style="background:#A1D233; color:#000;">
+                    {{ isset($user) ? 'Simpan Perubahan' : 'Tambah Pengguna' }}
+                </button>
+            </div>
+        </form>
     </div>
 </div>
 @endsection

@@ -3,24 +3,34 @@
 namespace App\Http\Controllers;
 
 use App\Models\News;
-use App\Models\User; // Pastikan User di-import
+use App\Models\User; 
 use Illuminate\Support\Facades\DB;
 use Illuminate\Http\Request;
 
 class PublicController extends Controller
 {
-    public function index() {
-        $carouselNews = News::orderBy('published_at', 'desc')->take(3)->get();
-        $latestNews = News::orderBy('published_at', 'desc')->skip(3)->take(6)->get();
+    public function index()
+    {
+        $carouselNews = News::where('is_carousel', 1)
+            ->orderByDesc('published_at')
+            ->take(3)
+            ->get();
 
-        // Ambil Rektor (asumsi role 'rektor')
-        $rektor = \App\Models\User::where('role', 'rektor')->first();
-        
-        // Ambil Departemen beserta head_user-nya
-        $departments = \App\Models\Department::where('status', 'active')->get();
-        
-        // ... (data carouselNews dan latestNews tetap sama)
-        
-        return view('home', compact('rektor', 'departments', 'carouselNews', 'latestNews'));
+        $latestNews = News::where('is_carousel', 0)
+            ->orderByDesc('published_at')
+            ->take(6)
+            ->get();
+
+        $rektor = User::where('role', 'rektor')->first();
+
+        $departments = \App\Models\Department::where('status', 'active')
+            ->get();
+
+        return view('home', compact(
+            'rektor',
+            'departments',
+            'carouselNews',
+            'latestNews'
+        ));
     }
 }

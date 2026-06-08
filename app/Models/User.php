@@ -10,13 +10,8 @@ use Laravel\Sanctum\HasApiTokens;
 class User extends Authenticatable
 {
     use HasApiTokens, HasFactory, Notifiable;
-
-    // Tambahkan baris ini agar Laravel tidak mencari kolom 'id'
     protected $primaryKey = 'user_id';
-
-    /**
-     * Get the route key for the model.
-     */
+    
     public function getRouteKeyName(): string
     {
         return 'user_id';
@@ -31,7 +26,7 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
-        'role', // Pastikan role juga ada di sini agar bisa diakses
+        'role', 
     ];
 
     /**

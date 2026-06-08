@@ -2,19 +2,24 @@
 @section('title', isset($newsItem) ? 'Edit Berita' : 'Tambah Berita')
 
 @section('content')
-<div style="--neon:#A1D233;--neon-dim:#8BBF1F;--neon-glow:rgba(161,210,51,0.18);--dark:#0D0F0A;--panel:#141610;--card:#1A1D14;--border:rgba(161,210,51,0.15);--text:#E8F0D0;--muted:#6B7A55;">
+<div class="space-y-6">
 
-    <div class="mb-6">
-        <a href="{{ route('admin.news.index') }}" class="text-sm font-semibold inline-flex items-center gap-1 mb-2" style="color:var(--muted);">
+    <div class="flex flex-col gap-2">
+        <a href="{{ route('admin.news.index') }}"
+           class="text-sm font-semibold inline-flex items-center gap-1 text-gray-500 hover:text-gray-700">
             ← Kembali
         </a>
-        <h2 class="text-xl font-bold" style="font-family:'Syne',sans-serif;">
+        <h2 class="text-2xl font-extrabold text-gray-900">
             {{ isset($newsItem) ? 'Edit Berita' : 'Tambah Berita Baru' }}
         </h2>
+        <p class="text-sm text-gray-500">
+            Kelola judul, konten, gambar, dan publikasi berita.
+        </p>
     </div>
 
-    <div class="max-w-2xl">
-        <div class="rounded-2xl border p-6" style="background:var(--card); border-color:var(--border);">
+    <div class="max-w-6xl w-full">
+        <div class="rounded-3xl border bg-white shadow-sm p-5 sm:p-6"
+             style="border-color:#E5E7EB;">
             <form method="POST"
                   action="{{ isset($newsItem) ? route('admin.news.update', $newsItem->news_id) : route('admin.news.store') }}"
                   enctype="multipart/form-data">
@@ -22,88 +27,122 @@
                 @if(isset($newsItem)) @method('PUT') @endif
 
                 <div class="space-y-5">
-                    <!-- Judul -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Judul Berita</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">Judul Berita</label>
                         <input type="text" name="title" value="{{ old('title', $newsItem->title ?? '') }}" required
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text);"
+                               class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                               style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
                                placeholder="Masukkan judul berita">
-                        @error('title')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
+                        @error('title') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Slug -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Slug (URL)</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">Slug (URL)</label>
                         <input type="text" name="slug" value="{{ old('slug', $newsItem->slug ?? '') }}" required
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text);"
+                               class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                               style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
                                placeholder="contoh-judul-berita">
-                        @error('slug')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
+                        @error('slug') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Konten -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Konten</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">Konten</label>
                         <textarea name="content" rows="8" required
-                                  class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition resize-none"
-                                  style="background:var(--panel); border:1px solid var(--border); color:var(--text);"
+                                  class="w-full px-4 py-3 rounded-xl text-sm outline-none transition resize-none border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                                  style="border-color:#E5E7EB; --tw-ring-color:#A1D233;"
                                   placeholder="Tulis konten berita di sini...">{{ old('content', $newsItem->content ?? '') }}</textarea>
-                        @error('content')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
+                        @error('content') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Gambar -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Gambar</label>
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">Gambar</label>
                         @if(isset($newsItem) && $newsItem->image)
                         <div class="mb-3">
-                            <img src="{{ asset($newsItem->image) }}" class="h-28 rounded-xl object-cover" style="border:1px solid var(--border);">
-                            <p class="text-xs mt-1" style="color:var(--muted);">Gambar saat ini. Upload baru untuk mengganti.</p>
+                            <img src="{{ asset($newsItem->image) }}"
+                                 alt="{{ $newsItem->title }}"
+                                 class="h-28 rounded-xl object-cover border"
+                                 style="border-color:#E5E7EB;">
+                            <p class="text-xs mt-1 text-gray-500">Gambar saat ini. Upload baru untuk mengganti.</p>
                         </div>
                         @endif
-                        <div class="relative">
-                            <input type="file" name="image" id="imgInput" accept="image/*" {{ isset($newsItem) ? '' : 'required' }}
-                                   class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold"
-                                   style="background:var(--panel); border:1px solid var(--border); color:var(--text); file:background:var(--neon-glow); file:color:var(--neon);">
-                        </div>
-                        @error('image')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
+
+                        <input type="file" name="image" id="imgInput" accept="image/*" {{ isset($newsItem) ? '' : 'required' }}
+                               class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 file:mr-3 file:py-1 file:px-3 file:rounded-lg file:border-0 file:text-xs file:font-semibold focus:bg-white focus:ring-2"
+                               style="border-color:#E5E7EB; --tw-ring-color:#A1D233;">
+                        @error('image') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Tanggal Publish -->
                     <div>
-                        <label class="block text-xs font-bold uppercase tracking-wider mb-2" style="color:var(--muted);">Tanggal Publikasi</label>
+                        <label class="block text-sm font-semibold text-gray-700 mb-2">
+                            Tagar
+                        </label>
+
+                        <select name="tagar"
+                                class="w-full px-4 py-3 rounded-xl border bg-white text-gray-900">
+                            <option value="nct">NCT</option>
+                            <option value="nct-127">NCT 127</option>
+                            <option value="nct-dream">NCT DREAM</option>
+                            <option value="wayv">WayV</option>
+                            <option value="nct-dojaejung">NCT DOJAEJUNG</option>
+                            <option value="nct-wish">NCT WISH</option>
+                            <option value="nct-jnjm">NCT JNJM</option>
+                        </select>
+                    </div>
+
+                    <div>
+                        <label class="block text-xs font-bold uppercase tracking-wider mb-2 text-gray-500">Tanggal Publikasi</label>
                         <input type="date" name="published_at"
                                value="{{ old('published_at', isset($newsItem) ? \Carbon\Carbon::parse($newsItem->published_at)->format('Y-m-d') : date('Y-m-d')) }}"
-                               class="w-full px-4 py-3 rounded-xl text-sm outline-none focus:ring-2 transition"
-                               style="background:var(--panel); border:1px solid var(--border); color:var(--text);">
-                        @error('published_at')<p class="mt-1 text-xs" style="color:#f87171;">{{ $message }}</p>@enderror
+                               class="w-full px-4 py-3 rounded-xl text-sm outline-none transition border bg-gray-50 text-gray-900 focus:bg-white focus:ring-2"
+                               style="border-color:#E5E7EB; --tw-ring-color:#A1D233;">
+                        @error('published_at') <p class="mt-1 text-xs text-red-500">{{ $message }}</p> @enderror
                     </div>
 
-                    <!-- Carousel Toggle -->
-                    <div class="flex items-center justify-between p-4 rounded-xl" style="background:var(--panel); border:1px solid var(--border);">
+                    <div class="flex items-center justify-between gap-4 p-4 rounded-2xl border bg-gray-50"
+                         style="border-color:#E5E7EB;">
                         <div>
-                            <p class="text-sm font-semibold">Tampilkan di Carousel</p>
-                            <p class="text-xs mt-0.5" style="color:var(--muted);">Berita akan tampil di slider utama halaman beranda</p>
+                            <p class="text-sm font-semibold text-gray-900">Tampilkan di Carousel</p>
+                            <p class="text-xs mt-0.5 text-gray-500">Berita akan tampil di slider utama halaman beranda.</p>
                         </div>
-                        <label class="relative inline-flex items-center cursor-pointer ml-4">
-                            <input type="checkbox" name="is_carousel" value="1" class="sr-only peer"
-                                   {{ old('is_carousel', $newsItem->is_carousel ?? false) ? 'checked' : '' }}>
-                            <div class="w-11 h-6 rounded-full peer transition-all duration-300 peer-checked:after:translate-x-full after:content-[''] after:absolute after:top-0.5 after:left-[2px] after:rounded-full after:w-5 after:h-5 after:transition-all"
-                                 style="background:var(--muted);"
-                                 id="toggleTrack"></div>
+
+                        <label class="relative inline-flex items-center cursor-pointer">
+                            <input
+                                type="checkbox"
+                                name="is_carousel"
+                                value="1"
+                                class="sr-only peer"
+                                {{ old('is_carousel', $newsItem->is_carousel ?? false) ? 'checked' : '' }}
+                            >
+
+                            <div
+                                class="w-11 h-6 rounded-full bg-gray-300
+                                    peer-checked:bg-[#A1D233]
+                                    transition-all
+                                    after:content-['']
+                                    after:absolute
+                                    after:top-0.5
+                                    after:left-[2px]
+                                    after:bg-white
+                                    after:rounded-full
+                                    after:h-5
+                                    after:w-5
+                                    after:transition-all
+                                    peer-checked:after:translate-x-5">
+                            </div>
                         </label>
                     </div>
                 </div>
 
-                <div class="flex gap-3 mt-7">
+                <div class="flex flex-col sm:flex-row gap-3 mt-7">
                     <button type="submit"
                             class="flex-1 py-3 rounded-xl font-bold text-sm transition hover:opacity-90"
-                            style="background:var(--neon); color:#000;">
+                            style="background:#A1D233; color:#000; box-shadow:0 0 18px rgba(161,210,51,.22);">
                         {{ isset($newsItem) ? 'Simpan Perubahan' : 'Publikasikan Berita' }}
                     </button>
+
                     <a href="{{ route('admin.news.index') }}"
-                       class="px-5 py-3 rounded-xl font-semibold text-sm transition border"
-                       style="color:var(--muted); border-color:var(--border);">
+                       class="px-5 py-3 rounded-xl font-semibold text-sm transition border bg-white text-gray-700 hover:bg-gray-50"
+                       style="border-color:#E5E7EB;">
                         Batal
                     </a>
                 </div>
@@ -112,17 +151,10 @@
     </div>
 </div>
 
-<style>
-    input[type="checkbox"].sr-only:checked + div#toggleTrack,
-    input[type="checkbox"].sr-only:checked ~ div {
-        background: var(--neon) !important;
-    }
-    /* Simple toggle style via JS */
-</style>
 <script>
-    // Auto-generate slug from title
     const titleInput = document.querySelector('input[name="title"]');
     const slugInput = document.querySelector('input[name="slug"]');
+
     if (titleInput && slugInput && !slugInput.value) {
         titleInput.addEventListener('input', function() {
             slugInput.value = this.value
@@ -133,17 +165,6 @@
         });
     }
 
-    // Toggle styling
-    const checkbox = document.querySelector('input[name="is_carousel"]');
-    const track = document.getElementById('toggleTrack');
-    function updateToggle() {
-        if (checkbox.checked) {
-            track.style.background = '#A1D233';
-            track.style.setProperty('--tw-after-bg', '#fff');
-        } else {
-            track.style.background = '#6B7A55';
-        }
-    }
     if (checkbox && track) {
         updateToggle();
         checkbox.addEventListener('change', updateToggle);

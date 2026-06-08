@@ -11,16 +11,18 @@ class UserController extends Controller
 {
     public function index(Request $request)
     {
-        $query = User::latest();
+        $users = User::query()
+            ->when($request->filled('search'), function ($query) use ($request) {
+                $search = $request->search;
 
-        if ($request->filled('search')) {
-            $query->where(function ($q) use ($request) {
-                $q->where('name', 'like', '%' . $request->search . '%')
-                  ->orWhere('email', 'like', '%' . $request->search . '%');
-            });
-        }
-
-        $users = $query->paginate(10)->withQueryString();
+                $query->where(function ($q) use ($search) {
+                    $q->where('name', 'LIKE', "%{$search}%")
+                    ->orWhere('email', 'LIKE', "%{$search}%");
+                });
+            })
+            ->latest()
+            ->paginate(10)
+            ->withQueryString();
 
         return view('admin.users.index', compact('users'));
     }
@@ -32,7 +34,7 @@ class UserController extends Controller
 
     public function store(Request $request)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email',
             'password' => 'required|string|min:6',
@@ -40,14 +42,15 @@ class UserController extends Controller
         ]);
 
         User::create([
-            'name'     => $request->name,
-            'email'    => $request->email,
-            'password' => Hash::make($request->password),
-            'role'     => $request->role,
+            'name'     => $validated['name'],
+            'email'    => $validated['email'],
+            'password' => Hash::make($validated['password']),
+            'role'     => $validated['role'],
         ]);
 
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'Pengguna berhasil ditambahkan!');
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Pengguna berhasil ditambahkan!');
     }
 
     public function edit(User $user)
@@ -57,7 +60,7 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $request->validate([
+        $validated = $request->validate([
             'name'     => 'required|string|max:255',
             'email'    => 'required|email|unique:users,email,' . $user->user_id . ',user_id',
             'password' => 'nullable|string|min:6',
@@ -65,32 +68,34 @@ class UserController extends Controller
         ]);
 
         $data = [
-            'name'  => $request->name,
-            'email' => $request->email,
-            'role'  => $request->role,
+            'name'  => $validated['name'],
+            'email' => $validated['email'],
+            'role'  => $validated['role'],
         ];
 
-        if ($request->filled('password')) {
-            $data['password'] = Hash::make($request->password);
+        if (!empty($validated['password'])) {
+            $data['password'] = Hash::make($validated['password']);
         }
 
         $user->update($data);
 
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'Pengguna berhasil diperbarui!');
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Pengguna berhasil diperbarui!');
     }
 
     public function destroy(User $user)
     {
-        // Jangan hapus diri sendiri
-        if ($user->user_id === auth()->id()) {
-            return redirect()->route('admin.users.index')
-                             ->with('error', 'Tidak bisa menghapus akun sendiri!');
+        if (auth()->check() && auth()->user()->user_id === $user->user_id) {
+            return redirect()
+                ->route('admin.users.index')
+                ->with('error', 'Tidak bisa menghapus akun sendiri!');
         }
 
         $user->delete();
 
-        return redirect()->route('admin.users.index')
-                         ->with('success', 'Pengguna berhasil dihapus!');
+        return redirect()
+            ->route('admin.users.index')
+            ->with('success', 'Pengguna berhasil dihapus!');
     }
 }

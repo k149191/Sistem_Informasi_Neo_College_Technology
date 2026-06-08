@@ -2,11 +2,46 @@
 @section('title', 'Dashboard')
 
 @section('content')
-<div style="--neon:#A1D233;--neon-dim:#8BBF1F;--neon-glow:rgba(161,210,51,0.18);--dark:#0D0F0A;--panel:#141610;--card:#1A1D14;--border:rgba(161,210,51,0.15);--text:#E8F0D0;--muted:#6B7A55;">
+<div class="space-y-6">
 
-    <!-- Stats Cards -->
-    <div class="grid grid-cols-2 lg:grid-cols-4 gap-3 sm:gap-4 mb-6">
+    <div class="rounded-3xl border bg-white shadow-sm p-5 sm:p-6 lg:p-8"
+         style="border-color:#E5E7EB;">
+        <div class="flex flex-col gap-5 lg:flex-row lg:items-center lg:justify-between">
+            <div class="min-w-0">
+                <p class="text-xs font-bold uppercase tracking-[0.2em] text-gray-500 mb-2">
+                    Admin Panel
+                </p>
+                <h2 class="text-2xl sm:text-3xl font-extrabold text-gray-900 leading-tight">
+                    Dashboard NCT Admin
+                </h2>
+                <p class="mt-2 text-sm text-gray-600 max-w-2xl">
+                    Pantau ringkasan data, kelola berita, dan atur pengguna dari satu tempat dengan tampilan yang lebih rapi dan ringan.
+                </p>
+            </div>
 
+            <div class="flex flex-col sm:flex-row gap-3 sm:flex-wrap sm:justify-start lg:justify-end w-full lg:w-auto">
+                <a href="{{ route('admin.news.create') }}"
+                   class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm transition hover:opacity-90 active:scale-[0.98] w-full sm:w-auto"
+                   style="background:#A1D233; color:#000;">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/>
+                    </svg>
+                    Tambah Berita
+                </a>
+
+                <a href="{{ route('admin.users.create') }}"
+                   class="inline-flex items-center justify-center gap-2 px-4 py-3 rounded-xl font-semibold text-sm border bg-white text-gray-800 transition hover:bg-gray-50 active:scale-[0.98] w-full sm:w-auto"
+                   style="border-color:#E5E7EB;">
+                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/>
+                    </svg>
+                    Tambah Pengguna
+                </a>
+            </div>
+        </div>
+    </div>
+
+    <div class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4">
         @php
         $stats = [
             ['label' => 'Total Pengguna', 'value' => $totalUsers ?? 0, 'icon' => '<path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 20h5v-2a3 3 0 00-5.356-1.857M17 20H7m10 0v-2c0-.656-.126-1.283-.356-1.857M7 20H2v-2a3 3 0 015.356-1.857M7 20v-2c0-.656.126-1.283.356-1.857m0 0a5.002 5.002 0 019.288 0M15 7a3 3 0 11-6 0 3 3 0 016 0z"/>'],
@@ -17,130 +52,189 @@
         @endphp
 
         @foreach($stats as $stat)
-        <div class="rounded-2xl p-4 sm:p-5 border" style="background:var(--card); border-color:var(--border);">
-            <div class="flex items-center justify-between mb-3">
-                <p class="text-xs font-semibold uppercase tracking-wider" style="color:var(--muted);">{{ $stat['label'] }}</p>
-                <div class="w-8 h-8 rounded-lg flex items-center justify-center" style="background:var(--neon-glow);">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" style="color:var(--neon-text);">{!! $stat['icon'] !!}</svg>
+        <div class="rounded-3xl border bg-white shadow-sm p-5 hover:shadow-md transition"
+             style="border-color:#E5E7EB;">
+            <div class="flex items-start justify-between gap-4">
+                <div class="min-w-0">
+                    <p class="text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                        {{ $stat['label'] }}
+                    </p>
+                    <p class="mt-3 text-3xl font-extrabold text-gray-900">
+                        {{ $stat['value'] }}
+                    </p>
+                </div>
+                <div class="w-11 h-11 rounded-2xl flex items-center justify-center flex-shrink-0"
+                     style="background:rgba(161,210,51,0.14);">
+                    <svg class="w-5 h-5 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        {!! $stat['icon'] !!}
+                    </svg>
                 </div>
             </div>
-            <p class="text-2xl sm:text-3xl font-bold" style="color:var(--neon-text);">{{ $stat['value'] }}</p>
         </div>
         @endforeach
     </div>
 
-    <!-- Middle Section -->
-    <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 mb-6">
-
-        <!-- Berita Terbaru (2/3) -->
-        <div class="lg:col-span-2 rounded-2xl border overflow-hidden" style="background:var(--card); border-color:var(--border);">
-            <div class="flex items-center justify-between px-5 py-4 border-b" style="border-color:var(--border);">
-                <h3 class="font-bold text-sm">Berita Terbaru</h3>
-                <a href="{{ route('admin.news.index') }}" class="text-xs font-semibold" style="color:var(--neon-text);">Lihat semua →</a>
+    <div class="rounded-3xl border bg-white shadow-sm overflow-hidden"
+         style="border-color:#E5E7EB;">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 sm:px-6 py-4 border-b"
+             style="border-color:#E5E7EB;">
+            <div class="min-w-0">
+                <h3 class="text-base font-bold text-gray-900">Berita Terbaru</h3>
+                <p class="text-sm text-gray-500 mt-1">Daftar konten yang paling baru dibuat atau dipublikasikan.</p>
             </div>
-            <div class="divide-y" style="border-color:var(--border);">
-                @forelse($latestNews ?? [] as $news)
-                <div class="flex items-center gap-4 px-5 py-3">
-                    <img src="{{ asset($news->image) }}" class="w-10 h-10 rounded-lg object-cover flex-shrink-0" style="border:1px solid var(--border);">
-                    <div class="flex-1 min-w-0">
-                        <p class="text-sm font-semibold truncate">{{ $news->title }}</p>
-                        <p class="text-xs" style="color:var(--muted);">{{ \Carbon\Carbon::parse($news->published_at)->format('d M Y') }}</p>
-                    </div>
-                    <a href="{{ route('admin.news.edit', $news->news_id) }}" class="text-xs px-2 py-1 rounded-lg flex-shrink-0" style="background:var(--neon-glow); color:var(--neon-text);">Edit</a>
-                </div>
-                @empty
-                <p class="px-5 py-8 text-sm text-center" style="color:var(--muted);">Belum ada berita.</p>
-                @endforelse
-            </div>
+            <a href="{{ route('admin.news.index') }}"
+               class="text-sm font-semibold text-gray-900 hover:opacity-70 whitespace-nowrap">
+                Lihat semua →
+            </a>
         </div>
 
-        <!-- Quick Actions (1/3) -->
-        <div class="rounded-2xl border p-5" style="background:var(--card); border-color:var(--border);">
-            <h3 class="font-bold text-sm mb-4">Aksi Cepat</h3>
-            <div class="space-y-3">
-                <a href="{{ route('admin.news.create') }}"
-                   class="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-semibold text-sm transition hover:opacity-90"
-                   style="background:var(--neon); color:#000;">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
-                    Tambah Berita
-                </a>
-                <a href="{{ route('admin.users.create') }}"
-                   class="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-semibold text-sm transition border hover:opacity-80"
-                   style="background:var(--neon-glow); color:var(--neon-text); border-color:var(--border);">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18 9v3m0 0v3m0-3h3m-3 0h-3m-2-5a4 4 0 11-8 0 4 4 0 018 0zM3 20a6 6 0 0112 0v1H3v-1z"/></svg>
-                    Tambah Pengguna
-                </a>
-                <a href="/" target="_blank"
-                   class="flex items-center gap-3 w-full px-4 py-3 rounded-xl font-semibold text-sm transition border hover:opacity-80"
-                   style="color:var(--muted); border-color:var(--border);">
-                    <svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10 6H6a2 2 0 00-2 2v10a2 2 0 002 2h10a2 2 0 002-2v-4M14 4h6m0 0v6m0-6L10 14"/></svg>
-                    Lihat Website
-                </a>
-            </div>
+        <div class="divide-y" style="border-color:#E5E7EB;">
+            @forelse($latestNews ?? [] as $news)
+            <div class="flex flex-col sm:flex-row sm:items-center gap-4 px-5 sm:px-6 py-4">
+                <img src="{{ asset($news->image) }}"
+                     alt="{{ $news->title }}"
+                     class="w-full sm:w-14 h-40 sm:h-14 rounded-2xl object-cover flex-shrink-0 border"
+                     style="border-color:#E5E7EB;">
 
-            <!-- Mini info -->
-            <div class="mt-6 pt-5 border-t" style="border-color:var(--border);">
-                <p class="text-xs font-bold uppercase tracking-widest mb-3" style="color:var(--muted);">Info Sistem</p>
-                <div class="space-y-2 text-xs" style="color:var(--muted);">
-                    <div class="flex justify-between">
-                        <span>Laravel</span>
-                        <span style="color:var(--neon-text);">v10.x</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>PHP</span>
-                        <span style="color:var(--neon-text);">8.1</span>
-                    </div>
-                    <div class="flex justify-between">
-                        <span>Status</span>
-                        <span class="flex items-center gap-1" style="color:var(--neon-text);">
-                            <span class="w-1.5 h-1.5 rounded-full inline-block" style="background:var(--neon);"></span> Online
-                        </span>
-                    </div>
+                <div class="flex-1 min-w-0">
+                    <p class="text-sm font-semibold text-gray-900 truncate">
+                        {{ $news->title }}
+                    </p>
+                    <p class="text-xs text-gray-500 mt-1">
+                        {{ \Carbon\Carbon::parse($news->published_at)->format('d M Y') }}
+                    </p>
                 </div>
             </div>
+            @empty
+            <div class="px-6 py-10 text-center">
+                <div class="mx-auto w-14 h-14 rounded-2xl flex items-center justify-center mb-4"
+                     style="background:rgba(161,210,51,0.14);">
+                    <svg class="w-6 h-6 text-gray-800" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"/>
+                    </svg>
+                </div>
+                <p class="text-sm font-medium text-gray-700">Belum ada berita.</p>
+                <p class="text-xs text-gray-500 mt-1">Tambahkan berita pertama untuk mengisi dashboard.</p>
+            </div>
+            @endforelse
         </div>
     </div>
 
-    <!-- Pengguna Terbaru -->
-    <div class="rounded-2xl border overflow-hidden" style="background:var(--card); border-color:var(--border);">
-        <div class="flex items-center justify-between px-5 py-4 border-b" style="border-color:var(--border);">
-            <h3 class="font-bold text-sm">Pengguna Terbaru</h3>
-            <a href="{{ route('admin.users.index') }}" class="text-xs font-semibold" style="color:var(--neon-text);">Lihat semua →</a>
+    <div class="rounded-3xl border bg-white shadow-sm overflow-hidden"
+         style="border-color:#E5E7EB;">
+        <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 px-5 sm:px-6 py-4 border-b"
+             style="border-color:#E5E7EB;">
+            <div class="min-w-0">
+                <h3 class="text-base font-bold text-gray-900">Pengguna Terbaru</h3>
+                <p class="text-sm text-gray-500 mt-1">Data pengguna terbaru yang masuk ke sistem.</p>
+            </div>
+            <a href="{{ route('admin.users.index') }}"
+               class="text-sm font-semibold text-gray-900 hover:opacity-70 whitespace-nowrap">
+                Lihat semua →
+            </a>
         </div>
-        <div class="overflow-x-auto">
+
+        <div class="sm:hidden divide-y" style="border-color:#E5E7EB;">
+            @forelse($latestUsers ?? [] as $user)
+            <div class="p-5">
+                <div class="flex items-start gap-3">
+                    <div class="w-11 h-11 rounded-full overflow-hidden flex items-center justify-center text-sm font-bold flex-shrink-0 border"
+                         style="background:rgba(161,210,51,0.14); color:#1F2937; border-color:#E5E7EB;">
+                        @if(!empty($user->profil_img))
+                            <img src="{{ asset($user->profil_img) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                        @else
+                            {{ strtoupper(substr($user->name, 0, 1)) }}
+                        @endif
+                    </div>
+
+                    <div class="min-w-0 flex-1">
+                        <p class="font-semibold text-gray-900 truncate">{{ $user->name }}</p>
+                        <p class="text-sm text-gray-600 truncate mt-0.5">{{ $user->email }}</p>
+
+                        <div class="mt-3 flex flex-wrap gap-2">
+                            <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold"
+                                  style="background:rgba(161,210,51,0.14); color:#4B6E00;">
+                                {{ $user->role ?? 'User' }}
+                            </span>
+                            <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold border text-gray-600"
+                                  style="border-color:#E5E7EB;">
+                                {{ $user->created_at->format('d M Y') }}
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @empty
+            <div class="px-6 py-10 text-center">
+                <p class="text-sm font-medium text-gray-700">Belum ada pengguna.</p>
+                <p class="text-xs text-gray-500 mt-1">Silakan tambahkan user baru dari menu Aksi Cepat.</p>
+            </div>
+            @endforelse
+        </div>
+
+        <div class="hidden sm:block overflow-x-auto">
             <table class="w-full text-sm">
-                <thead>
-                    <tr class="border-b" style="border-color:var(--border);">
-                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider" style="color:var(--muted);">Nama</th>
-                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider hidden sm:table-cell" style="color:var(--muted);">Email</th>
-                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider hidden md:table-cell" style="color:var(--muted);">Role</th>
-                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-wider hidden lg:table-cell" style="color:var(--muted);">Bergabung</th>
+                <thead class="bg-gray-50">
+                    <tr class="border-b" style="border-color:#E5E7EB;">
+                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            Pengguna
+                        </th>
+                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            Email
+                        </th>
+                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            Role
+                        </th>
+                        <th class="text-left px-5 py-3 text-xs font-bold uppercase tracking-[0.18em] text-gray-500">
+                            Bergabung
+                        </th>
                     </tr>
                 </thead>
-                <tbody class="divide-y" style="border-color:var(--border);">
+
+                <tbody class="divide-y" style="border-color:#E5E7EB;">
                     @forelse($latestUsers ?? [] as $user)
-                    <tr class="hover:opacity-80 transition">
-                        <td class="px-5 py-3">
+                    <tr class="hover:bg-gray-50/70 transition">
+                        <td class="px-5 py-4">
                             <div class="flex items-center gap-3">
-                                <div class="w-8 h-8 rounded-full flex items-center justify-center text-xs font-bold flex-shrink-0" style="background:var(--neon-glow); color:var(--neon-text);">
-                                    {{ strtoupper(substr($user->name, 0, 1)) }}
+                                <div class="w-10 h-10 rounded-full overflow-hidden flex items-center justify-center text-sm font-bold flex-shrink-0 border"
+                                     style="background:rgba(161,210,51,0.14); color:#1F2937; border-color:#E5E7EB;">
+                                    @if(!empty($user->profil_img))
+                                        <img src="{{ asset($user->profil_img) }}" alt="{{ $user->name }}" class="w-full h-full object-cover">
+                                    @else
+                                        {{ strtoupper(substr($user->name, 0, 1)) }}
+                                    @endif
                                 </div>
-                                <span class="font-medium">{{ $user->name }}</span>
+
+                                <span class="font-medium text-gray-900 truncate">{{ $user->name }}</span>
                             </div>
                         </td>
-                        <td class="px-5 py-3 hidden sm:table-cell" style="color:var(--muted);">{{ $user->email }}</td>
-                        <td class="px-5 py-3 hidden md:table-cell">
-                            <span class="px-2 py-1 rounded-full text-xs font-semibold" style="background:var(--neon-glow); color:var(--neon-text);">{{ $user->role ?? 'User' }}</span>
+
+                        <td class="px-5 py-4 text-gray-600">
+                            {{ $user->email }}
                         </td>
-                        <td class="px-5 py-3 hidden lg:table-cell text-xs" style="color:var(--muted);">{{ $user->created_at->format('d M Y') }}</td>
+
+                        <td class="px-5 py-4">
+                            <span class="inline-flex px-3 py-1 rounded-full text-xs font-semibold"
+                                  style="background:rgba(161,210,51,0.14); color:#4B6E00;">
+                                {{ $user->role ?? 'User' }}
+                            </span>
+                        </td>
+
+                        <td class="px-5 py-4 text-gray-500">
+                            {{ $user->created_at->format('d M Y') }}
+                        </td>
                     </tr>
                     @empty
-                    <tr><td colspan="4" class="px-5 py-8 text-center text-sm" style="color:var(--muted);">Belum ada pengguna.</td></tr>
+                    <tr>
+                        <td colspan="4" class="px-5 py-10 text-center">
+                            <p class="text-sm font-medium text-gray-700">Belum ada pengguna.</p>
+                            <p class="text-xs text-gray-500 mt-1">Silakan tambahkan user baru dari menu Aksi Cepat.</p>
+                        </td>
+                    </tr>
                     @endforelse
                 </tbody>
             </table>
         </div>
     </div>
-
 </div>
 @endsection

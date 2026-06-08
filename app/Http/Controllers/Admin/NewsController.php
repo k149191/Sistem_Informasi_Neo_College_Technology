@@ -6,7 +6,6 @@ use App\Http\Controllers\Controller;
 use App\Models\News;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
-use Illuminate\Support\Facades\Storage;
 
 class NewsController extends Controller
 {
@@ -36,28 +35,38 @@ class NewsController extends Controller
             'content'      => 'required|string',
             'image'        => 'required|image|mimes:jpg,jpeg,png,webp|max:2048',
             'published_at' => 'required|date',
+            'tagar'        => 'required|in:nct,nct-127,nct-dream,wayv,nct-dojaejung,nct-wish,nct-jnjm',
         ]);
 
-        $imagePath = $request->file('image')->store('news', 'public');
+        $file = $request->file('image');
+
+        $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+        $file->move(public_path('img/news'), $fileName);
+
+        $imagePath = 'img/news/' . $fileName;
 
         News::create([
-            'title'        => $request->title,
-            'slug'         => Str::slug($request->slug),
-            'content'      => $request->content,
-            'image'        => 'storage/' . $imagePath,
+            'title'        => $request->input('title'),
+            'slug'         => Str::slug($request->input('slug')),
+            'content'      => $request->input('content', ''),
+            'image'        => $imagePath,
             'author_id'    => auth()->user()->user_id,
             'author_name'  => auth()->user()->name,
-            'published_at' => $request->published_at,
+            'published_at' => $request->input('published_at'),
             'is_carousel'  => $request->boolean('is_carousel'),
+            'tagar'        => $request->input('tagar'),
         ]);
 
-        return redirect()->route('admin.news.index')
-                         ->with('success', 'Berita berhasil dipublikasikan!');
+        return redirect()
+            ->route('admin.news.index')
+            ->with('success', 'Berita berhasil dipublikasikan!');
     }
 
     public function edit(News $news)
     {
         $newsItem = $news;
+
         return view('admin.news.form', compact('newsItem'));
     }
 
@@ -69,43 +78,50 @@ class NewsController extends Controller
             'content'      => 'required|string',
             'image'        => 'nullable|image|mimes:jpg,jpeg,png,webp|max:2048',
             'published_at' => 'required|date',
+            'tagar'        => 'required|in:nct,nct-127,nct-dream,wayv,nct-dojaejung,nct-wish,nct-jnjm',
         ]);
 
         $data = [
-            'title'        => $request->title,
-            'slug'         => Str::slug($request->slug),
-            'content'      => $request->content,
-            'published_at' => $request->published_at,
+            'title'        => $request->input('title'),
+            'slug'         => Str::slug($request->input('slug')),
+            'content'      => $request->input('content', ''),
+            'published_at' => $request->input('published_at'),
             'is_carousel'  => $request->boolean('is_carousel'),
+            'tagar'        => $request->input('tagar'),
         ];
 
         if ($request->hasFile('image')) {
-            // Hapus gambar lama jika ada
-            $oldPath = str_replace('storage/', '', $news->image);
-            if (Storage::disk('public')->exists($oldPath)) {
-                Storage::disk('public')->delete($oldPath);
+
+            if ($news->image && file_exists(public_path($news->image))) {
+                unlink(public_path($news->image));
             }
-            $imagePath = $request->file('image')->store('news', 'public');
-            $data['image'] = 'storage/' . $imagePath;
+
+            $file = $request->file('image');
+
+            $fileName = time() . '_' . uniqid() . '.' . $file->getClientOriginalExtension();
+
+            $file->move(public_path('img/news'), $fileName);
+
+            $data['image'] = 'img/news/' . $fileName;
         }
 
         $news->update($data);
 
-        return redirect()->route('admin.news.index')
-                         ->with('success', 'Berita berhasil diperbarui!');
+        return redirect()
+            ->route('admin.news.index')
+            ->with('success', 'Berita berhasil diperbarui!');
     }
 
     public function destroy(News $news)
     {
-        // Hapus gambar dari storage
-        $oldPath = str_replace('storage/', '', $news->image);
-        if (Storage::disk('public')->exists($oldPath)) {
-            Storage::disk('public')->delete($oldPath);
+        if ($news->image && file_exists(public_path($news->image))) {
+            unlink(public_path($news->image));
         }
 
         $news->delete();
 
-        return redirect()->route('admin.news.index')
-                         ->with('success', 'Berita berhasil dihapus!');
+        return redirect()
+            ->route('admin.news.index')
+            ->with('success', 'Berita berhasil dihapus!');
     }
 }
